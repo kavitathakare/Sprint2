@@ -22,21 +22,25 @@ export abstract class BaseUserComponent<
     if (value['password']) {
       user['password'] = value['password'];
     }
+    if(!user['password']) {
+      user['password'] = "Test@123";
+    }
     delete value['ids'];
     delete value['password'];
     value.user = user;
 
-    this.userService.getIdByUsername(user.id).subscribe({
-      next: (id) => {
-        // if (!user.id || (user.id && user.id !== id)) {
-        //   window.alert('Username already exists! Please try again!');
-        //   return;
-        // }
-        super.process(value);
-      },
-      error: () => {
-        super.process(value);
-      },
-    });
+    if(user.id) {
+      this.userService.getIdByUsername(user.id).subscribe({
+        next: (id) => {
+          super.process(value);
+        },
+        error: () => {
+          super.process(value);
+        },
+      });
+    } else{
+      super.process(value);
+    }
+    
   }
 }

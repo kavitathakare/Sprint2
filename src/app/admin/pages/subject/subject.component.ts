@@ -3,12 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { BaseComponent } from '@shared/directives/base-component';
 import { EntityAttribute } from '@core/models/entity-attribute.model';
 import { Subject } from '@core/models/subject.model';
-import { getStudyProgramDisplay } from '@core/models/study-program.model';
-import { getTeacherDisplay } from '@core/models/teacher.model';
 import { StudyProgramService } from '@core/services/study-program.service';
 import { TeacherService } from '@core/services/teacher.service';
 import { SubjectService } from '@core/services/subject.service';
-import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-subject',
@@ -16,7 +13,7 @@ import { Validators } from '@angular/forms';
   styleUrls: ['./subject.component.scss'],
 })
 export class SubjectComponent extends BaseComponent<Subject> implements OnInit {
-  title: string = 'Subjects';
+  title: string = 'Courses';
   name: string = 'subject';
   attributes: EntityAttribute[] = [
     {
@@ -25,54 +22,23 @@ export class SubjectComponent extends BaseComponent<Subject> implements OnInit {
       type: 'id',
     },
     {
-      key: 'name',
+      key: 'title',
       name: 'Name',
       type: 'text',
       required: true,
     },
     {
-      key: 'syllabus',
-      name: 'Syllabus',
-      type: 'lob',
+      key: 'description',
+      name: 'Discription',
+      type: 'text',
       required: true,
     },
     {
-      key: 'semester',
-      name: 'Semester',
-      type: 'number',
+      key: 'body',
+      name: 'Body',
+      type: 'text',
       required: true,
-      validators: [Validators.min(1), Validators.max(8)],
-      errorMessage: 'Please enter semester between 1 and 8',
-    },
-    {
-      key: 'ects',
-      name: 'ECTS',
-      type: 'number',
-      required: true,
-      validators: [Validators.min(1), Validators.max(10)],
-      errorMessage: 'Please enter ECTS between 1 and 10',
-    },
-    {
-      key: 'studyProgram',
-      name: 'Study program',
-      type: 'select',
-      required: true,
-      display: getStudyProgramDisplay,
-    },
-    {
-      key: 'professor',
-      name: 'Professor',
-      type: 'select',
-      required: true,
-      display: getTeacherDisplay,
-    },
-    {
-      key: 'assistant',
-      name: 'Assistant',
-      type: 'select',
-      required: true,
-      display: getTeacherDisplay,
-    },
+    }
   ];
 
   constructor(
@@ -86,8 +52,5 @@ export class SubjectComponent extends BaseComponent<Subject> implements OnInit {
 
   ngOnInit(): void {
     this.getPage(this.tableData);
-    this.getOptions('studyProgram', this.studyProgramService);
-    this.getOptions('professor', this.teacherService);
-    this.getOptions('assistant', this.teacherService);
   }
 }

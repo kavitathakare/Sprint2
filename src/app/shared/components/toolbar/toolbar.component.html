@@ -7,7 +7,7 @@
   <mat-toolbar-row>
     <div class="m-auto">
       <a mat-button routerLink="/about" class="md:text-lg">About</a>
-      <a mat-button routerLink="/faculties" class="md:text-lg">Faculties</a>
+      <!-- <a mat-button routerLink="/faculties" class="md:text-lg">Faculties</a> -->
       <a
         *ngIf="authService.validateRoles(['ROLE_STUDENT'], 'any')"
         mat-button

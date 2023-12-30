@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { EntityAttribute } from '@core/models/entity-attribute.model';
 import { Teacher } from '@core/models/teacher.model';
-import { getUserDisplay } from '@core/models/user.model';
 import { TeacherService } from '@core/services/teacher.service';
 import { UserService } from '@core/services/user.service';
 import { BaseUserComponent } from '../../directives/base-user-component';
 import format from 'xml-formatter';
 import { saveAs } from 'file-saver';
 import { Validators } from '@angular/forms';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-teacher',
@@ -71,25 +71,7 @@ export class TeacherComponent
       errorMessage: `Year of enrollment must be between ${
         new Date().getFullYear() - 10
       } and ${new Date().getFullYear()}`,
-    },
-    {
-      key: 'studyProgram',
-      name: 'Study program',
-      type: 'select',
-      required: true,
-    },
-    {
-      key: 'averageGrade',
-      name: 'Average grade',
-      type: 'skip',
-      sortable: false,
-    },
-    {
-      key: 'totalECTS',
-      name: 'Total ECTS',
-      type: 'skip',
-      sortable: false,
-    },
+    }
   ];
 
   constructor(
@@ -101,7 +83,7 @@ export class TeacherComponent
   }
 
   ngOnInit(): void {
-    this.getPage(this.tableData);
+    this.getPage(this.tableData, environment.baseUrl + '/teachers');
   }
 
   exportPdf() {

@@ -41,15 +41,15 @@ export class AuthService {
   }
 
   getStudentId(): number {
-    return this.user.studentId;
+    return this.user.id;
   }
 
   getTeacherId(): number {
-    return this.user.teacherId;
+    return this.user.id;
   }
 
   getAdminId(): number {
-    return this.user.adminId;
+    return this.user.id;
   }
 
   hasTokenExpired(): boolean {
@@ -141,12 +141,13 @@ export class AuthService {
   }
 
   validateRoles(roles: any, method = 'any') {
-    if (!this.accessToken || !['any', 'all'].includes(method)) return false;
+     if (!this.accessToken || !['any', 'all'].includes(method)) return false;
 
     if (method == 'any')
       return roles.some((role: any) => this.user.roles.includes(role));
 
     if (method == 'all')
       return roles.every((role: any) => this.user.roles.includes(role));
+  
   }
 }

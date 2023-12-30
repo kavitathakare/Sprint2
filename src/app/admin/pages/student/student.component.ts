@@ -11,6 +11,7 @@ import { UserService } from '@core/services/user.service';
 import format from 'xml-formatter';
 import { saveAs } from 'file-saver';
 import { Validators } from '@angular/forms';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-student',
@@ -62,7 +63,7 @@ export class StudentComponent
       required: true,
     },
     {
-      key: 'yearOfEnrollment',
+      key: 'yearOfEnroll',
       name: 'Year of enrollment',
       type: 'number',
       required: true,
@@ -80,19 +81,7 @@ export class StudentComponent
       type: 'select',
       required: true,
       display: getStudyProgramDisplay,
-    },
-    {
-      key: 'averageGrade',
-      name: 'Average grade',
-      type: 'skip',
-      sortable: false,
-    },
-    {
-      key: 'totalECTS',
-      name: 'Total ECTS',
-      type: 'skip',
-      sortable: false,
-    },
+    }
   ];
 
   constructor(
@@ -105,7 +94,7 @@ export class StudentComponent
   }
 
   ngOnInit(): void {
-    this.getPage(this.tableData);
+    this.getPage(this.tableData, environment.baseUrl+`/students`);
     this.getOptions('studyProgram', this.studyProgramService);
   }
 

@@ -8,6 +8,7 @@ import { DialogFormComponent } from '@shared/components/dialog-form/dialog-form.
 import { DialogDeleteComponent } from '@shared/components/dialog-delete/dialog-delete.component';
 import { TableComponent } from '@shared/components/table/table.component';
 import { TableData } from '@core/models/table-data.model';
+import { environment } from 'environments/environment';
 
 @Directive()
 export abstract class BaseComponent<T extends Base> {
@@ -28,10 +29,10 @@ export abstract class BaseComponent<T extends Base> {
     return this.attributes.find((attribute) => attribute.key === key);
   }
 
-  getPage(data?: any) {
+  getPage(data?: any, baseUrl?: string) {
     data !== undefined ? (this.tableData = data) : (data = this.tableData);
 
-    this.service.getPage(data?.request).subscribe((data:any) => {
+    this.service.getPage(data?.request, baseUrl).subscribe((data:any) => {
       let resData = {
         content: data,
         totalElements: data.length,
@@ -107,24 +108,36 @@ export abstract class BaseComponent<T extends Base> {
   }
 
   process(value: T) {
+    const baseUr = environment.baseUrl;
     delete value['ids'];
     value.id
-      ? this.service.update(value.id, value).subscribe({
+      ? this.service.update(value.id, value, value['type']).subscribe({
           next: () => {
-            this.getPage();
+            this.getPage(null, this.getUrl(baseUr, value));
           },
           error: () => {
             window.alert('Something went wrong! Please try again');
           },
         })
-      : this.service.create(value).subscribe({
+      : this.service.create(value, value['type']).subscribe({
           next: () => {
-            this.getPage();
+            this.getPage(null, this.getUrl(baseUr, value));
           },
           error: () => {
             window.alert('Something went wrong! Please try again');
           },
         });
+  }
+
+  getUrl = (baseUr: string, value?: T) => {
+    if (value && value['type'] == 'student') {
+      baseUr = baseUr + '/students';
+    } else if (value && value['type'] == 'teacher') {
+      baseUr = baseUr + '/students';
+    } else {
+      baseUr = baseUr + '/course';
+    }
+    return baseUr;
   }
 
   delete(ids: number[]) {
@@ -135,9 +148,18 @@ export abstract class BaseComponent<T extends Base> {
 
     const dialogRef = this.dialog.open(DialogDeleteComponent);
     dialogRef.afterClosed().subscribe((result) => {
+      const baseUr = environment.baseUrl;
       if (result) {
-        this.service.delete(ids).subscribe(() => {
-          this.getPage();
+        let isTeacherRoute = location.href.split('/').some(e => e.includes("teachers"));
+        let isStudRoute = location.href.split('/').some(e => e.includes("students"));
+        let type = 'teacher';
+        if(!isTeacherRoute && isStudRoute) {
+          type = 'student';
+        } else {
+          type = 'course';
+        }
+        this.service.deleteMultiple(ids, type).subscribe(() => {
+          this.getPage(null, this.getUrl(baseUr));
           this.table.clearSelection();
         });
       }

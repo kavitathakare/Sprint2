@@ -7,7 +7,7 @@ import { RestService } from './rest.service';
   providedIn: 'root',
 })
 export class SubjectService extends RestService<Subject> {
-  override url: string = `${this.url}/subject-service/subjects`;
+  override url: string = `${this.url}/course`;
 
   getByStudyProgramId(id: number): Observable<Subject[]> {
     return this.http.get<Subject[]>(`${this.url}/study-program/${id}/all`);

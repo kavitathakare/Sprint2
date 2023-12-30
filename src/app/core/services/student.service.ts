@@ -8,7 +8,7 @@ import { RestService } from './rest.service';
   providedIn: 'root',
 })
 export class StudentService extends RestService<Student> {
-  override url: string = `${this.url}/students`;
+  override url: string = `${this.url}`;
 
   getAllXml(): Observable<string> {
     return this.http.get(`${this.url}`, {

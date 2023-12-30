@@ -1,0 +1,9 @@
+td {
+    padding: 0;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    max-width: 50em !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
